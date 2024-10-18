@@ -23,10 +23,13 @@ router.delete('/:postId', authenticateJWT, PostController.deletePost); // Access
 
 // Like a post
 router.post('/:postId/like', authenticateJWT, PostController.likePost); // Accessible by all users
+router.get('/:postId/likes', PostController.getLikesForPost); // Accessible by all users
+
+router.post('/:postId/dislike', authenticateJWT, PostController.dislikePost); // Accessible by all users
 
 // Comment on a post
 router.post('/:postId/comment', authenticateJWT, PostController.commentOnPost); // Accessible by all users
-
+router.get('/user/:userId/posts', PostController.getPostsByUserId);
 // Get comments for a post
 router.get('/:postId/comments', PostController.getCommentsForPost); // Accessible by all users
 

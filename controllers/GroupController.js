@@ -17,14 +17,25 @@ exports.getAllGroups = (req, res) => {
         res.status(200).json(groups);
     });
 };
-exports.getAllCreatedGroups = (req, res) => {
-    console.log(req.user);
-    const userId = req.user.id;
-    Group.getAllCreatedGroups(userId,(err, groups) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.status(200).json(groups);
+
+exports.getUserGroups = (req, res) => {
+    const userId = req.params.userId; // Get userId from request parameters
+
+    Group.getUserGroups(userId, (err, groups) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error fetching user groups', error: err.message });
+        }
+        return res.status(200).json(groups);
     });
-};
+},
+    exports.getAllCreatedGroups = (req, res) => {
+        console.log(req.user);
+        const userId = req.user.id;
+        Group.getAllCreatedGroups(userId, (err, groups) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.status(200).json(groups);
+        });
+    };
 
 // Get group by ID
 exports.getGroupById = (req, res) => {

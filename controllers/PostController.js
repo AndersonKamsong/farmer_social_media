@@ -38,6 +38,16 @@ exports.getAllAllowedPosts = (req, res) => {
         res.status(200).json(posts);
     });
 };
+exports.getPostsByUserId = (req, res) => {
+    const userId = req.params.userId;
+
+    Post.getPostsByUserId(userId, (err, posts) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error fetching posts for the user' });
+        }
+        res.json(posts);
+    });
+};
 // Get post by ID
 exports.getPostById = (req, res) => {
     const postId = req.params.postId;
@@ -76,14 +86,32 @@ exports.likePost = (req, res) => {
         res.status(201).json({ message: 'Post liked successfully' });
     });
 };
+exports.dislikePost = (req, res) => {
+    const postId = req.params.postId;
+    const userId = req.user.id; // Extract user ID from JWT token
 
+    Post.dislikePost(postId, userId, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error disliking post' });
+        }
+        res.status(200).json({ message: 'Post disliked successfully' });
+    });
+};
+exports.getLikesForPost = (req, res) => {
+    const postId = req.params.postId;
+
+    Post.getLikesForPost(postId, (err, comments) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(200).json(comments);
+    });
+};
 // Comment on a post
 exports.commentOnPost = (req, res) => {
     const postId = req.params.postId;
     const userId = req.user.id; // Extract user ID from JWT token
-    const { comment } = req.body;
-
-    Post.commentOnPost(postId, userId, comment, (err, result) => {
+    const { content } = req.body;
+    console.log(req.body);
+    Post.commentOnPost(postId, userId, content, (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
         res.status(201).json({ message: 'Comment added successfully' });
     });

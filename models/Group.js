@@ -18,6 +18,34 @@ exports.getAllGroups = (callback) => {
     });
 };
 
+exports.getUserGroups = (userId, callback) => {
+    const query = `
+        SELECT 
+            g.id, 
+            g.name, 
+            g.description, 
+            g.created_by, 
+            u.name AS farmer_name, 
+            gm.role,               -- Include the role of the user in the group
+            gm.joined_at           -- Include the date the user joined the group
+        FROM 
+            groups g 
+        JOIN 
+            group_membership gm ON g.id = gm.group_id 
+        JOIN 
+            users u ON g.created_by = u.id 
+        WHERE 
+            gm.user_id = ?       -- Filter by user ID
+    `;
+
+    db.query(query, [userId], (err, results) => {
+        if (err) return callback(err);
+        callback(null, results);
+    });
+};
+
+
+
 exports.getAllCreatedGroups = (userId, callback) => {
     const query = `SELECT g.id, g.name, g.description, g.created_by, 
     u.name AS farmer_name FROM groups g 

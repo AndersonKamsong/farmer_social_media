@@ -12,7 +12,8 @@ router.get('/', GroupController.getAllGroups); // Accessible by all users
 router.get('/created',authenticateJWT, GroupController.getAllCreatedGroups); // Accessible by user connected
 // Get group by ID
 router.get('/:groupId', GroupController.getGroupById); // Accessible by all users
-
+// Route to get all groups a user belongs to
+router.get('/:userId/groups', GroupController.getUserGroups);
 // Update group
 router.put('/:groupId', authenticateJWT, GroupController.updateGroup); // Accessible by farmers
 
