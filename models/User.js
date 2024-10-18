@@ -86,16 +86,54 @@ exports.getAllFarmers = (callback) => {
     });
 };
 
-// Get user by ID
+// Get user by ID, along with followers
 exports.getUserById = (userId, callback) => {
-    const query = 'SELECT id, name, email, role, is_certified, bio, created_at FROM users WHERE id = ?';
+    const query = `
+        SELECT 
+            u.id, 
+            u.name, 
+            u.email, 
+            u.role, 
+            u.is_certified, 
+            u.bio, 
+            u.created_at,
+            GROUP_CONCAT(DISTINCT f.follower_id) AS followers -- Get all follower IDs
+        FROM 
+            users u
+        LEFT JOIN 
+            follows f ON u.id = f.followed_id -- Join to get followers
+        WHERE 
+            u.id = ?
+        GROUP BY 
+            u.id
+    `;
+
     db.query(query, [userId], (err, results) => {
         if (err || results.length === 0) {
             return callback(err || 'User not found');
         }
-        callback(null, results[0]);
+
+        // Convert the `followers` field from a comma-separated string to an array
+        const user = results[0];
+        user.followers = user.followers ? user.followers.split(',').map(Number) : [];
+
+        callback(null, user);
     });
 };
+
+exports.getFollowersForUser = (userId, callback) => {
+    const query = `
+        SELECT f.id, f.created_at, u.id AS user_id, u.name AS user_name, u.email AS user_email
+        FROM follows f
+        JOIN users u ON f.follower_id = u.id
+        WHERE f.followed_id = ?
+    `;
+    db.query(query, [userId], (err, results) => {
+        if (err) return callback(err);
+        callback(null, results);
+    });
+};
+
 
 // Update user profile
 exports.updateUserProfile = (userId, name, email, bio, callback) => {
@@ -105,6 +143,7 @@ exports.updateUserProfile = (userId, name, email, bio, callback) => {
         callback(null, result);
     });
 };
+
 
 // Follow a farmer
 exports.followFarmer = (followerId, followedId, callback) => {

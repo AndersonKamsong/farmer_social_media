@@ -20,15 +20,16 @@ router.get('/farmers', authenticateJWT, UserController.getAllFarmers); // Only a
 
 // Get user profile
 router.get('/:userId', authenticateJWT, UserController.getUserProfile); // Accessible by user and admin
+router.get('/:userId/followers', authenticateJWT, UserController.getFollowersForUser); // Accessible by user and admin
 
 // Update user profile
 router.put('/profile', authenticateJWT, UserController.updateUserProfile); // Accessible by user
 
 // Follow a farmer
-router.post('/:farmerId/follow', UserController.followFarmer); // Requires authentication
+router.post('/:farmerId/follow',authenticateJWT, UserController.followFarmer); // Requires authentication
 
 // Unfollow a farmer
-router.delete('/:farmerId/unfollow', UserController.unfollowFarmer); // Requires authentication
+router.delete('/:farmerId/unfollow',authenticateJWT, UserController.unfollowFarmer); // Requires authentication
 
 // Get followers of a farmer
 router.get('/:farmerId/followers', UserController.getFollowers); // Accessible by all users

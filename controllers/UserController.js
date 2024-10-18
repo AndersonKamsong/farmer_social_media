@@ -97,7 +97,13 @@ exports.getUserProfile = (req, res) => {
         res.status(200).json(user);
     });
 };
-
+exports.getFollowersForUser = (req, res) => {
+    const userId = req.params.userId;
+    User.getFollowersForUser(userId, (err, user) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(200).json(user);
+    });
+};
 // Update user profile
 exports.updateUserProfile = (req, res) => {
     const userId = req.user.id; // Extract from JWT token
