@@ -1,4 +1,5 @@
 const Group = require('../models/Group');
+const GroupMembership = require('../models/GroupMembership');
 
 // Create a new group
 exports.createGroup = (req, res) => {
@@ -6,7 +7,14 @@ exports.createGroup = (req, res) => {
     const farmerId = req.user.id; // Extract farmer ID from JWT token
     Group.createGroup(name, description, farmerId, (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
-        res.status(201).json({ message: 'Group created successfully', groupId: result.insertId });
+        let groupId = result.insertId
+        GroupMembership.joinGroup(farmerId, groupId, (err, result) => {
+            if (err) return res.status(500).json({ error: err.message });
+            GroupMembership.setMemberAsAdmin("admin", farmerId, groupId, (error, result) => {
+                if (error) return res.status(500).json({ message: error.message });
+                res.status(201).json({ message: 'Group created successfully', groupId: groupId });
+            });
+        });
     });
 };
 
@@ -27,15 +35,15 @@ exports.getUserGroups = (req, res) => {
         }
         return res.status(200).json(groups);
     });
-},
-    exports.getAllCreatedGroups = (req, res) => {
-        console.log(req.user);
-        const userId = req.user.id;
-        Group.getAllCreatedGroups(userId, (err, groups) => {
-            if (err) return res.status(500).json({ error: err.message });
-            res.status(200).json(groups);
-        });
-    };
+}
+exports.getAllCreatedGroups = (req, res) => {
+    console.log(req.user);
+    const userId = req.user.id;
+    Group.getAllCreatedGroups(userId, (err, groups) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(200).json(groups);
+    });
+};
 
 // Get group by ID
 exports.getGroupById = (req, res) => {

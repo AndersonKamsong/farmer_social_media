@@ -77,10 +77,29 @@ exports.getAllCreatedPosts = (userId, callback) => {
 };
 exports.getAllGroupPosts = (groupId, callback) => {
     const query = `
-        SELECT p.id, p.title, p.content, p.created_at, u.name AS farmer_name, p.group_id 
-        FROM posts p 
-        JOIN users u ON p.created_by = u.id  where group_id = ${groupId}
-        ORDER BY p.created_at DESC
+        SELECT 
+            p.id, 
+            p.title, 
+            p.content, 
+            p.created_at, 
+            u.name AS farmer_name, 
+            p.group_id,
+            COUNT(l.user_id) AS total_likes,
+            GROUP_CONCAT(DISTINCT u_likes.id) AS liked_by_users
+        FROM 
+            posts p 
+        JOIN 
+            users u ON p.created_by = u.id 
+        LEFT JOIN 
+            likes l ON p.id = l.post_id 
+        LEFT JOIN 
+            users u_likes ON l.user_id = u_likes.id
+        WHERE 
+            p.group_id = ${groupId}
+        GROUP BY 
+            p.id 
+        ORDER BY 
+            p.created_at DESC
     `;
     db.query(query, (err, results) => {
         if (err) return callback(err);

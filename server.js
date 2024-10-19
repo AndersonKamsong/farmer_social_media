@@ -7,6 +7,7 @@ const groupMembershipRoutes = require('./routes/groupMembership'); // Import gro
 const postRoutes = require('./routes/post'); // Import post routes
 const notificationRoutes = require('./routes/notification'); // Import notification routes
 const adminActionRoutes = require('./routes/adminAction'); // Import admin action routes
+const messageRoutes = require('./routes/messages');
 const db = require('./config/db'); // Ensure this points to your DB configuration
 const dotenv = require('dotenv');
 const {authenticateJWT} = require('./middleware/auth'); // Your authentication middleware
@@ -39,6 +40,7 @@ app.use('/group-membership', groupMembershipRoutes); // Use group membership rou
 app.use('/posts', postRoutes); // Use post routes
 app.use('/notifications', authenticateJWT, notificationRoutes); // Notification routes (authenticated)
 app.use('/admin-actions', authenticateJWT, adminActionRoutes); // Admin action routes (authenticated)
+app.use('/messages', messageRoutes);
 app.use("/images", express.static(path.join(process.cwd(), 'PostsImage')));
 
 app.post('/api/uploadFile/:id', async (req, res) => {
