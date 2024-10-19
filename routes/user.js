@@ -39,5 +39,10 @@ router.get('/following', UserController.getFollowing); // Requires authenticatio
 
 // Check if a user is following a farmer
 router.get('/:farmerId/is-following', UserController.checkIfFollowing); // Requires authentication
+// Block a user
+router.get('/block/:id', UserController.blockUser);
+
+// Reactivate a user
+router.get('/reactivate/:id', UserController.reactivateUser);
 
 module.exports = router;

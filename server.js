@@ -1,47 +1,75 @@
+// server.js
 const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user'); // Import user routes
-const groupRoutes = require('./routes/group'); // Import group routes
-const groupMembershipRoutes = require('./routes/groupMembership'); // Import group membership routes
-const postRoutes = require('./routes/post'); // Import post routes
-const notificationRoutes = require('./routes/notification'); // Import notification routes
-const adminActionRoutes = require('./routes/adminAction'); // Import admin action routes
+const userRoutes = require('./routes/user');
+const groupRoutes = require('./routes/group');
+const groupMembershipRoutes = require('./routes/groupMembership');
+const postRoutes = require('./routes/post');
+const notificationRoutes = require('./routes/notification');
+const adminActionRoutes = require('./routes/adminAction');
 const messageRoutes = require('./routes/messages');
-const db = require('./config/db'); // Ensure this points to your DB configuration
+const db = require('./config/db');
 const dotenv = require('dotenv');
-const {authenticateJWT} = require('./middleware/auth'); // Your authentication middleware
+const { authenticateJWT } = require('./middleware/auth');
+const http = require('http');
+const socketIo = require('socket.io');
+const formidable = require('formidable');
+const path = require('path');
+const fs = require('fs');
+const Message = require('./models/Message');
 
 dotenv.config();
 const process = require('process');
 const cwd = process.cwd();
-const path = require('path')
-const fs = require('fs')
-const formidable = require('formidable');
 
 const app = express();
+const server = http.createServer(app);
+
+// Configure Socket.io with CORS
+const io = socketIo(server, {
+    cors: {
+        origin: "http://localhost:3000", // Change this to your frontend URL
+        methods: ["GET", "POST"],
+        allowedHeaders: ["Content-Type"],
+        credentials: true
+    }
+});
+
 app.use(cors());
 app.use(express.json());
 
-// // Connect to the database
-// db.connect((err) => {
-//     if (err) {
-//         console.error('Database connection failed:', err.stack);
-//         return;
-//     }
-//     console.log('Connected to the database.');
-// });
-
 // Routes
 app.use('/auth', authRoutes);
-app.use('/users', userRoutes); // Use user routes
-app.use('/groups', groupRoutes); // Use group routes
-app.use('/group-membership', groupMembershipRoutes); // Use group membership routes
-app.use('/posts', postRoutes); // Use post routes
-app.use('/notifications', authenticateJWT, notificationRoutes); // Notification routes (authenticated)
-app.use('/admin-actions', authenticateJWT, adminActionRoutes); // Admin action routes (authenticated)
+app.use('/users', userRoutes);
+app.use('/groups', groupRoutes);
+app.use('/group-membership', groupMembershipRoutes);
+app.use('/posts', postRoutes);
+app.use('/notifications', authenticateJWT, notificationRoutes);
+app.use('/admin-actions', authenticateJWT, adminActionRoutes);
 app.use('/messages', messageRoutes);
-app.use("/images", express.static(path.join(process.cwd(), 'PostsImage')));
+app.use('/images', express.static(path.join(cwd, 'PostsImage')));
+
+
+// Start the server
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+io.on('connection', (socket) => {
+    console.log('A user connected:', socket.id);
+
+    // Listen for incoming messages
+    socket.on('sendMessage', (message) => {
+        // Emit the message to the intended receiver
+        // socket.emit('receiveMessage', message);
+        io.emit('receiveMessage', message);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('A user disconnected:', socket.id);
+    });
+});
 
 app.post('/api/uploadFile/:id', async (req, res) => {
     try {
@@ -87,7 +115,8 @@ app.post('/api/uploadFile/:id', async (req, res) => {
         return res.status(501).send({ error: 'Server error.' });
     }
 });
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Export the io instance for use in other modules
+module.exports = {
+    socketIo,
+    io
+};

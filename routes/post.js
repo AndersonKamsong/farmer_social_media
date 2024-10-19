@@ -12,6 +12,8 @@ router.get('/group/:groupId', PostController.getGroupPosts); // Accessible by al
 router.get('/allowed', PostController.getAllAllowedPosts); // Accessible by all users
 router.get('/created', authenticateJWT, PostController.getAllCreatedPosts); // Accessible by all users
 
+router.get('/:id/list', PostController.getAllPostsAdmin);
+
 // Get post by ID
 router.get('/:postId', PostController.getPostById); // Accessible by all users
 
@@ -38,5 +40,16 @@ router.get('/:postId/like-count', PostController.getLikeCountForPost); // Access
 
 // Get users who liked a post
 router.get('/:postId/users-who-liked', PostController.getUsersWhoLikedPost); // Accessible by all users
+// Block a post
+// router.put('/block/:postId', authenticateJWT, PostController.blockPost);
 
+// Reactivate a blocked post
+// router.put('/reactivate/:postId', authenticateJWT, PostController.reactivatePost);
+// Get all posts for admin
+
+// Block a post
+router.put('/block/:id', PostController.blockPost);
+
+// Reactivate a post
+router.put('/reactivate/:id', PostController.reactivatePost);
 module.exports = router;

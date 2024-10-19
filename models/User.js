@@ -70,7 +70,7 @@ exports.authenticateUser = (email, password, callback) => {
 
 // Get all users
 exports.getAllUsers = (callback) => {
-    const query = 'SELECT id, name, email, role, is_certified, created_at FROM users';
+    const query = 'SELECT id, name, email, role, is_certified, created_at,isBlocked FROM users';
     db.query(query, (err, results) => {
         if (err) return callback(err);
         callback(null, results);

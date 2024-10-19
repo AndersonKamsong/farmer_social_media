@@ -12,12 +12,39 @@ exports.createPost = (title, content, farmerId, groupId, callback) => {
 // Get all posts
 exports.getAllPosts = (callback) => {
     const query = `
-        SELECT p.id, p.title, p.content, p.created_at, u.name AS farmer_name, p.group_id 
+        SELECT p.id, p.title, p.content, p.created_at,p.isBlocked, u.name AS farmer_name, p.group_id 
         FROM posts p 
         JOIN users u ON p.created_by = u.id 
         ORDER BY p.created_at DESC
     `;
     db.query(query, (err, results) => {
+        if (err) return callback(err);
+        callback(null, results);
+    });
+};
+exports.getAllPostsAdmin = (callback) => {
+    const query = `
+        SELECT p.id, p.title, p.content, p.created_at,p.isBlocked, u.name AS farmer_name, p.group_id 
+        FROM posts p 
+        JOIN users u ON p.created_by = u.id 
+        ORDER BY p.created_at DESC
+    `;
+    db.query(query, (err, results) => {
+        if (err) return callback(err);
+        callback(null, results);
+    });
+};
+exports.blockPost = (postId, callback) => {
+    const query = 'UPDATE posts SET isBlocked = 1 WHERE id = ?';
+    db.query(query, [postId], (err, results) => {
+        if (err) return callback(err);
+        callback(null, results);
+    });
+};
+
+exports.reactivatePost = (postId, callback) => {
+    const query = 'UPDATE posts SET isBlocked = 0 WHERE id = ?';
+    db.query(query, [postId], (err, results) => {
         if (err) return callback(err);
         callback(null, results);
     });
@@ -51,7 +78,7 @@ exports.getPostsByUserId = (userId, callback) => {
 
     db.query(query, [userId], (err, results) => {
         if (err) return callback(err);
-        
+
         // Convert the `liked_by_users` field from a comma-separated string to an array
         const updatedResults = results.map(post => ({
             ...post,

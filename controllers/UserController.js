@@ -1,49 +1,8 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const db = require('../config/db');
 
-// Create an admin (only an existing admin can create another admin)
-// exports.createAdmin = async (req, res) => {
-//     try {
-//         const { email, password, firstName, lastName } = req.body;
-//         // Check if current user is an admin (you would have user role checks in middleware or here)
-//         const hashedPassword = await bcrypt.hash(password, 10);
-//         const newAdmin = await User.create({ email, password: hashedPassword, firstName, lastName, role: 'admin' });
-//         res.status(201).json(newAdmin);
-//     } catch (error) {
-//         res.status(500).json({ message: 'Failed to create admin', error });
-//     }
-// };
 
-// // Register a user
-// exports.registerUser = async (req, res) => {
-//     try {
-//         const { email, password, firstName, lastName, accountType } = req.body;
-//         const hashedPassword = await bcrypt.hash(password, 10);
-//         const newUser = await User.create({ email, password: hashedPassword, firstName, lastName, accountType });
-//         res.status(201).json(newUser);
-//     } catch (error) {
-//         res.status(500).json({ message: 'Failed to register user', error });
-//     }
-// };
-
-// // Login user
-// exports.loginUser = async (req, res) => {
-//     const { email, password } = req.body;
-//     try {
-//         const user = await User.findOne({ where: { email } });
-//         if (!user) {
-//             return res.status(404).json({ message: 'User not found' });
-//         }
-//         const validPassword = await bcrypt.compare(password, user.password);
-//         if (!validPassword) {
-//             return res.status(401).json({ message: 'Invalid password' });
-//         }
-//         const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-//         res.json({ token, user });
-//     } catch (error) {
-//         res.status(500).json({ message: 'Login failed', error });
-//     }
-// };
 // Create an admin
 exports.createAdmin = (req, res) => {
     const { name, email, password } = req.body;
@@ -159,5 +118,26 @@ exports.checkIfFollowing = (req, res) => {
     User.isFollowing(followerId, followedId, (err, isFollowing) => {
         if (err) return res.status(500).json({ error: err.message });
         res.status(200).json({ isFollowing });
+    });
+};
+
+
+exports.blockUser = (req, res) => {
+    const userId = req.params.id;
+    console.log(userId);
+    const query = 'UPDATE users SET isBlocked = true WHERE id = ?';
+    db.query(query, [userId], (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: 'User blocked successfully.' });
+    });
+};
+
+exports.reactivateUser = (req, res) => {
+    const userId = req.params.id;
+    console.log(userId);
+    const query = 'UPDATE users SET isBlocked = false WHERE id = ?';
+    db.query(query, [userId], (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: 'User reactivated successfully.' });
     });
 };

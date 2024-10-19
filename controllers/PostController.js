@@ -15,7 +15,31 @@ exports.createPost = (req, res) => {
 exports.getAllPosts = (req, res) => {
     Post.getAllPosts((err, posts) => {
         if (err) return res.status(500).json({ error: err.message });
+        // console.log(posts);
         res.status(200).json(posts);
+    });
+};
+exports.getAllPostsAdmin = (req, res) => {
+    Post.getAllPostsAdmin((err, posts) => {
+        if (err) return res.status(500).json({ error: err.message });
+        console.log(posts);
+        res.status(200).json(posts);
+    });
+};
+exports.blockPost = (req, res) => {
+    const postId = req.params.id;
+    console.log(postId);
+    Post.blockPost(postId, (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(200).json({ message: 'Post blocked successfully.' });
+    });
+};
+
+exports.reactivatePost = (req, res) => {
+    const postId = req.params.id;
+    Post.reactivatePost(postId, (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(200).json({ message: 'Post reactivated successfully.' });
     });
 };
 exports.getGroupPosts = (req, res) => {
@@ -116,6 +140,7 @@ exports.commentOnPost = (req, res) => {
         res.status(201).json({ message: 'Comment added successfully' });
     });
 };
+
 
 // Get comments for a post
 exports.getCommentsForPost = (req, res) => {
