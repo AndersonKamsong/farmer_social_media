@@ -49,6 +49,7 @@ app.use('/notifications', authenticateJWT, notificationRoutes);
 app.use('/admin-actions', authenticateJWT, adminActionRoutes);
 app.use('/messages', messageRoutes);
 app.use('/images', express.static(path.join(cwd, 'PostsImage')));
+app.use('/group-images', express.static(path.join(cwd, 'GroupsImage')));
 
 
 // Start the server
@@ -79,6 +80,50 @@ app.post('/api/uploadFile/:id', async (req, res) => {
         const currentDir = cwd;
         // console.log("currentDir", currentDir);
         const uploadDir = path.join(currentDir, 'PostsImage');
+        fs.mkdirSync(uploadDir, { recursive: true });
+        // Basic Configuration
+        form.multiples = true
+        form.maxFileSize = 50 * 1024 * 1024 // 5MB
+        form.uploadDir = uploadDir
+        let imageFiles = []
+        // Parsing
+        await form.parse(req, async (err, fields, files) => {
+            if (err) {
+                console.log('Error parsing the files', err)
+                return res.status(400).json({
+                    error: 'There was an error parsing the files',
+                })
+            }
+            // console.log("files.image :", files.images.length)
+            imageFiles = files.images;
+            // console.log("good here");
+            if (!imageFiles) {
+                return res.status(400).send({ error: 'No files were uploaded.' });
+            }
+            let names = []
+            for (let index = 0; index < imageFiles.length; index++) {
+                let oldPath = uploadDir + '/' + imageFiles[index].newFilename
+                let newPath = uploadDir + '/' + id
+                fs.renameSync(oldPath, newPath);
+            }
+            // console.log(imageStr);
+            return res.status(200).json({
+                message: 'Ok ',
+            })
+        })
+    } catch (err) {
+        console.log(err)
+        return res.status(501).send({ error: 'Server error.' });
+    }
+});
+app.post('/api/groupImage/:id', async (req, res) => {
+    try {
+        // Basic setup
+        const id = req.params.id
+        const form = new formidable.IncomingForm()
+        const currentDir = cwd;
+        // console.log("currentDir", currentDir);
+        const uploadDir = path.join(currentDir, 'GroupsImage');
         fs.mkdirSync(uploadDir, { recursive: true });
         // Basic Configuration
         form.multiples = true

@@ -66,7 +66,7 @@ CREATE TABLE `comments` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
   CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +75,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (1,11,3,NULL,'2024-10-18 06:53:27'),(2,11,3,NULL,'2024-10-18 06:54:13'),(3,11,3,'helllo','2024-10-18 06:54:57'),(4,11,1,'hello','2024-10-18 08:22:12'),(5,11,1,'test','2024-10-18 17:08:04');
+INSERT INTO `comments` VALUES (1,11,3,NULL,'2024-10-18 06:53:27'),(2,11,3,NULL,'2024-10-18 06:54:13'),(3,11,3,'helllo','2024-10-18 06:54:57'),(4,11,1,'hello','2024-10-18 08:22:12'),(5,11,1,'test','2024-10-18 17:08:04'),(6,12,1,'test','2024-10-20 05:51:50');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,7 +127,7 @@ CREATE TABLE `group_membership` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `group_membership_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE,
   CONSTRAINT `group_membership_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,7 +136,7 @@ CREATE TABLE `group_membership` (
 
 LOCK TABLES `group_membership` WRITE;
 /*!40000 ALTER TABLE `group_membership` DISABLE KEYS */;
-INSERT INTO `group_membership` VALUES (1,2,1,'admin','2024-10-18 04:17:40'),(5,2,3,'member','2024-10-18 05:29:48'),(7,4,3,'member','2024-10-18 17:04:48');
+INSERT INTO `group_membership` VALUES (1,2,1,'admin','2024-10-18 04:17:40'),(5,2,3,'member','2024-10-18 05:29:48'),(7,4,3,'member','2024-10-18 17:04:48'),(9,5,1,'member','2024-10-19 05:47:29'),(10,6,1,'admin','2024-10-19 05:49:16'),(11,3,1,'member','2024-10-19 06:04:38'),(12,7,1,'admin','2024-10-19 07:03:40'),(13,8,1,'admin','2024-10-20 06:04:33'),(14,9,1,'admin','2024-10-20 06:06:03'),(15,10,1,'admin','2024-10-20 06:07:55');
 /*!40000 ALTER TABLE `group_membership` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -156,7 +156,7 @@ CREATE TABLE `groups` (
   PRIMARY KEY (`id`),
   KEY `created_by` (`created_by`),
   CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -165,7 +165,7 @@ CREATE TABLE `groups` (
 
 LOCK TABLES `groups` WRITE;
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
-INSERT INTO `groups` VALUES (2,'test 1','hi',3,'2024-10-18 03:33:38'),(3,'test12','hello',1,'2024-10-18 03:44:02'),(4,'group 3','hello',3,'2024-10-18 17:04:21');
+INSERT INTO `groups` VALUES (2,'test 1','hi',3,'2024-10-18 03:33:38'),(3,'test12','hello',1,'2024-10-18 03:44:02'),(4,'group 3','hello',3,'2024-10-18 17:04:21'),(5,'good day','hello',1,'2024-10-19 05:47:29'),(6,'test56good','hello',1,'2024-10-19 05:49:16'),(7,'It group','hello',1,'2024-10-19 07:03:39'),(8,'hello','test',1,'2024-10-20 06:04:33'),(9,'helo','test',1,'2024-10-20 06:06:03'),(10,'yy','tyw',1,'2024-10-20 06:07:54');
 /*!40000 ALTER TABLE `groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -186,7 +186,7 @@ CREATE TABLE `likes` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `likes_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
   CONSTRAINT `likes_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -195,7 +195,7 @@ CREATE TABLE `likes` (
 
 LOCK TABLES `likes` WRITE;
 /*!40000 ALTER TABLE `likes` DISABLE KEYS */;
-INSERT INTO `likes` VALUES (4,10,3,'2024-10-18 06:14:00'),(7,10,1,'2024-10-18 06:28:45'),(9,12,1,'2024-10-18 06:29:18'),(19,11,1,'2024-10-18 08:21:32'),(20,11,3,'2024-10-18 08:21:44'),(23,12,3,'2024-10-18 10:34:12'),(26,12,4,'2024-10-18 17:01:11');
+INSERT INTO `likes` VALUES (4,10,3,'2024-10-18 06:14:00'),(20,11,3,'2024-10-18 08:21:44'),(23,12,3,'2024-10-18 10:34:12'),(26,12,4,'2024-10-18 17:01:11'),(33,11,1,'2024-10-19 06:57:46'),(34,12,1,'2024-10-19 12:06:56'),(35,10,1,'2024-10-20 06:28:38'),(37,14,1,'2024-10-20 06:32:55');
 /*!40000 ALTER TABLE `likes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -217,7 +217,7 @@ CREATE TABLE `messages` (
   KEY `receiver_id` (`receiver_id`),
   CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -226,6 +226,7 @@ CREATE TABLE `messages` (
 
 LOCK TABLES `messages` WRITE;
 /*!40000 ALTER TABLE `messages` DISABLE KEYS */;
+INSERT INTO `messages` VALUES (1,1,2,'hi','2024-10-19 07:39:41'),(2,1,2,'hello','2024-10-19 07:41:19'),(3,1,2,'hi','2024-10-19 07:42:27'),(4,4,1,'hi','2024-10-19 07:43:08'),(5,1,4,'hello','2024-10-19 07:43:48'),(6,1,4,'hello','2024-10-19 07:45:18'),(7,1,4,'hi','2024-10-19 07:57:19'),(8,1,4,'hi','2024-10-19 08:00:47'),(9,1,4,'hi','2024-10-19 08:04:19'),(10,1,4,'hello','2024-10-19 08:31:53'),(11,1,4,'hello','2024-10-19 08:32:15'),(12,1,4,'hello','2024-10-19 08:32:58'),(13,1,4,'hello','2024-10-19 08:33:54'),(14,1,4,'hello','2024-10-19 08:34:29'),(15,1,4,'hello','2024-10-19 08:39:35'),(16,4,1,'test1','2024-10-19 08:51:32'),(17,4,1,'hi','2024-10-19 08:52:29'),(18,4,1,'hel','2024-10-19 08:52:45'),(19,1,4,'hi','2024-10-19 08:56:49'),(20,1,4,'hi','2024-10-19 08:58:12'),(21,1,4,'test hello world','2024-10-19 08:59:19'),(22,4,1,'hi','2024-10-19 08:59:38'),(23,1,4,'test go day','2024-10-19 09:00:13'),(24,1,4,'hello go','2024-10-19 09:02:24');
 /*!40000 ALTER TABLE `messages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -273,12 +274,13 @@ CREATE TABLE `posts` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `image_url` varchar(255) DEFAULT NULL,
   `status` enum('blocked','allowed') DEFAULT 'allowed',
+  `isBlocked` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `group_id` (`group_id`),
   KEY `created_by` (`created_by`),
   CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE SET NULL,
   CONSTRAINT `posts_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -287,7 +289,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (10,'testing 1445','hello',NULL,3,'2024-10-18 02:50:29',NULL,'allowed'),(11,'hello','hi',NULL,3,'2024-10-18 05:49:03',NULL,'allowed'),(12,'helo','jskajkl',2,3,'2024-10-18 05:50:33',NULL,'allowed');
+INSERT INTO `posts` VALUES (10,'testing 1445','hello',NULL,3,'2024-10-18 02:50:29',NULL,'allowed',0),(11,'hello','hi',NULL,3,'2024-10-18 05:49:03',NULL,'allowed',0),(12,'helo','jskajkl',2,3,'2024-10-18 05:50:33',NULL,'allowed',1),(14,'good morning','hello world 56',10,1,'2024-10-20 06:20:33',NULL,'allowed',0);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -307,6 +309,7 @@ CREATE TABLE `users` (
   `is_certified` tinyint(1) DEFAULT 0,
   `bio` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `isBlocked` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -318,7 +321,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'test 134','mary1@gmail.com','$2a$10$RS.ShrJzO2KCvAercFS1retI/H6toWAazbrCjgtfRuklVhUqu4FAW','user',0,NULL,'2024-10-18 01:59:53'),(2,'mary thomson','mary@gmail.com','$2a$10$8lFHoLa9N9tcrnS/umPYYeBT2s1FRRE4gNdh7VQqeu92xMtALLa4i','farmer',0,NULL,'2024-10-18 02:00:37'),(3,'john thomson','john@gmail.com','$2a$10$yaAkAnWSXz4xaLwAwy06ieNUpdsD4xNwcjm8/BonnNqmbru5iAq1i','farmer',0,NULL,'2024-10-18 02:01:09'),(4,'test hello 121','test@gmail.com','$2a$10$uv3xjxLzVzuWHpWIC5hiCup0OL6izrcqwvcLeWAqFPVMS5UdhTnsm','farmer',0,NULL,'2024-10-18 17:00:40');
+INSERT INTO `users` VALUES (1,'test 134','mary1@gmail.com','$2a$10$RS.ShrJzO2KCvAercFS1retI/H6toWAazbrCjgtfRuklVhUqu4FAW','user',0,NULL,'2024-10-18 01:59:53',1),(2,'mary thomson','mary@gmail.com','$2a$10$8lFHoLa9N9tcrnS/umPYYeBT2s1FRRE4gNdh7VQqeu92xMtALLa4i','farmer',0,NULL,'2024-10-18 02:00:37',1),(3,'john thomson','john@gmail.com','$2a$10$yaAkAnWSXz4xaLwAwy06ieNUpdsD4xNwcjm8/BonnNqmbru5iAq1i','farmer',0,NULL,'2024-10-18 02:01:09',1),(4,'test hello 121','test@gmail.com','$2a$10$uv3xjxLzVzuWHpWIC5hiCup0OL6izrcqwvcLeWAqFPVMS5UdhTnsm','farmer',0,NULL,'2024-10-18 17:00:40',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -331,4 +334,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-18 18:28:06
+-- Dump completed on 2024-10-20  8:01:07
